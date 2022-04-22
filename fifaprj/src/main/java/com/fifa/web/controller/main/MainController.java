@@ -153,14 +153,18 @@ public class MainController {
 				System.out.println(list.get(i).getName().toString());
 				String winCnt = service.selectWinVsSearch(mainVsSearchBean);
 				String lossCnt = service.selectLossVsSearch(mainVsSearchBean);
-				int sum = Integer.parseInt(winCnt) + Integer.parseInt(lossCnt);
-				float score = ((float) Integer.parseInt(winCnt) / (float) sum) * 100;
+				String draw = service.selectDrawVsSearch(mainVsSearchBean);
+				float score = ((float) Integer.parseInt(winCnt) / (float) (Integer.parseInt(winCnt) + Integer.parseInt(lossCnt) + Integer.parseInt(draw))) * 100;
 				ArrayList<String> data1 = new ArrayList<>();
 				data1.add((String) session.getAttribute("userName"));
 				data1.add(list.get(i).getName().toString());
 				data1.add(winCnt);
 				data1.add(lossCnt);
-				data1.add(Float.toString(score));
+				data1.add(draw);
+				if (winCnt.equals("0") && lossCnt.equals("0")) {
+					data1.add("0.0");
+				} else
+					data1.add(String.format("%.1f",score));
 				data1.add("친선전");
 				datas.add(data1);
 			}
@@ -179,10 +183,12 @@ public class MainController {
 	@RequestMapping(value = "mainVsSearch", method = RequestMethod.POST)
 	public String mainVsSearchPost(HttpSession session, Model model, HttpServletRequest request,
 			MainVsSearchBean mainVsSearchBean) throws Exception {
-		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
-
-			return "error";
-		}
+		/*
+		 * if (request.getHeader("referer") == null || session.getAttribute("userName")
+		 * == null) {
+		 * 
+		 * return "error"; }
+		 */
 		List<PlayerBean> list = playerService.getPlayerName('Y');
 		ArrayList<ArrayList<String>> datas = new ArrayList<ArrayList<String>>();
 
@@ -192,21 +198,20 @@ public class MainController {
 			if (!request.getParameter("userName1").equals(list.get(i).getName().toString())) {
 				mainVsSearchBean.setPlayer1(request.getParameter("userName1"));
 				mainVsSearchBean.setPlayer2(list.get(i).getName().toString());
-				System.out.println(list.get(i).getName().toString());
 				String winCnt = service.selectWinVsSearch(mainVsSearchBean);
 				String lossCnt = service.selectLossVsSearch(mainVsSearchBean);
-				int sum = Integer.parseInt(winCnt) + Integer.parseInt(lossCnt);
-				float score = ((float) Integer.parseInt(winCnt) / (float) sum) * 100;
-				System.out.println(score);
+				String draw = service.selectDrawVsSearch(mainVsSearchBean);
+				float score = ((float) Integer.parseInt(winCnt) / (float) (Integer.parseInt(winCnt) + Integer.parseInt(lossCnt) + Integer.parseInt(draw))) * 100;
 				ArrayList<String> data1 = new ArrayList<>();
 				data1.add(mainVsSearchBean.getPlayer1());
 				data1.add(list.get(i).getName().toString());
 				data1.add(winCnt);
 				data1.add(lossCnt);
+				data1.add(draw);
 				if (winCnt.equals("0") && lossCnt.equals("0")) {
 					data1.add("0.0");
 				} else
-					data1.add(Float.toString(score));
+					data1.add(String.format("%.1f",score));
 				data1.add("친선전");
 				datas.add(data1);
 			}

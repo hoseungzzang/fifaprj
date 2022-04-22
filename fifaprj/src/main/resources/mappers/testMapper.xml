@@ -121,4 +121,15 @@
 		where vsWriter=#{player2} or vsOpponent=#{player2})B
 		where vsLoser=#{player1} and vsMatch='fMatch';
 	</select>
+	
+	<select id="selectDrawVsSearch" resultType="String" parameterType="MainVsSearchBeanAlias">
+		select count(vsLoser)
+		from(
+		select *
+		from(
+		select *
+		from vsHistory where vsWriter = #{player1} or vsOpponent= #{player1})A
+		where vsWriter=#{player2} or vsOpponent=#{player2})B
+		where vsLoser='무승부' and vsMatch='fMatch';
+	</select>
 </mapper>

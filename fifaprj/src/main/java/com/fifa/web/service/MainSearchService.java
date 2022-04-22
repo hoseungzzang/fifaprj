@@ -24,4 +24,6 @@ public interface MainSearchService {
 	 public String selectWinVsSearch(MainVsSearchBean mainVsSearchBean);
 	 
 	 public String selectLossVsSearch(MainVsSearchBean mainVsSearchBean);
+	 
+	 public String selectDrawVsSearch(MainVsSearchBean mainVsSearchBean);
 }

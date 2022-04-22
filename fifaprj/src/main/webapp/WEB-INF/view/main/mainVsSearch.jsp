@@ -42,9 +42,9 @@
 						<tr>
 							<td>${vsHistory.get(0)}</td>
 							<td>${vsHistory.get(1)}</td>
-							<td>${vsHistory.get(2)}승 ${vsHistory.get(3)}패</td>
-							<td>${vsHistory.get(4)}%</td>
-							<td>${vsHistory.get(5)}</td>
+							<td>${vsHistory.get(2)}승 ${vsHistory.get(4)}무 ${vsHistory.get(3)}패</td>
+							<td>${vsHistory.get(5)}%</td>
+							<td>${vsHistory.get(6)}</td>
 						</tr>
 					</c:forEach>
 				</tbody>

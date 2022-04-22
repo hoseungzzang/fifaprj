@@ -54,4 +54,9 @@ public class MainSearchServiceImpl implements MainSearchService {
 		return dao.selectLossVsSearch(mainVsSearchBean);
 	}
 	
+	@Override
+	public String selectDrawVsSearch(MainVsSearchBean mainVsSearchBean) {
+		return dao.selectDrawVsSearch(mainVsSearchBean);
+	}
+	
 }

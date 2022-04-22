@@ -62,4 +62,10 @@ public class MainSearchDaoImpl implements MainSearchDao {
 	
 		return sqlSession.selectOne(namespace+".selectLossVsSearch",mainVsSearchBean);
 	}
+	
+	@Override
+	public String selectDrawVsSearch(MainVsSearchBean mainVsSearchBean) {
+	
+		return sqlSession.selectOne(namespace+".selectDrawVsSearch",mainVsSearchBean);
+	}
 }
