@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+.fifaColor{color:#3ADF00}
+.fifaErrorColor{color:#F80404}
+
+.fifaButton{
+	background-color:#3ADF00;
+	border: 1px solid #3ADF00;
+	color:white;
+	font-size:18px;
+	padding: 10px 50px;
+	border-radius: 5px;
+	margin-top: 10px;
+	width:250px;
+}
+.custom{
+	background-color:#3ADF00;
+	border: 1px solid #3ADF00;
+	color:white;
+	font-size:18px;
+	
+}
+.fifaSelectBox{
+	width: 300px;
+	height:34px;
+padding: 6px 12px;
+border: 1px solid #ccc;
+font-family: inherit;
+background: url('../../images/arrow.jpg') no-repeat 95% 50%;
+border-radius: 4px;
+-webkit-appearance: none;
+-moz-appearance: none;
+appearance: none;
+background-color:white;
+
+
+
+}
+
+.item{
+	
+	text-align:left;
+	margin:0 auto;
+	font-size:18px;
+	
+}
+
+.margin{
+	
+	margin: 20px ,10px;
+}
+
+.center{
+	display: block; 
+	text-align: center;
+}
+
+.fontBlack{
+	color: black;
+    border-color: black;
+
+	}

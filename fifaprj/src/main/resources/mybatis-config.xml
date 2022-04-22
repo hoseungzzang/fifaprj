@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ 
+<configuration>
+
+ <typeAliases>        
+        <typeAlias alias="PlayerBeanAlias" type="com.fifa.web.bean.PlayerBean"/>
+        <typeAlias alias="SignUpBeanAlias" type="com.fifa.web.bean.SignUpBean"/>
+        <typeAlias alias="MainSearchBeanAlias" type="com.fifa.web.bean.MainSearchBean"/>
+        <typeAlias alias="PageMakerBeanAlias" type="com.fifa.web.bean.PageMakerBean"/>
+        <typeAlias alias="MainVsSearchBeanAlias" type="com.fifa.web.bean.MainVsSearchBean"/>
+    </typeAliases>
+
+
+ 
+</configuration>
+
+

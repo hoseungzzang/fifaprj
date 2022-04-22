@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ 
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fifa.web.testMapper">
+
+	<select id="getPlayerName" resultType="PlayerBeanAlias">
+		select
+		pindex,name from
+		player where signup = #{signUp} order by pindex asc;
+	</select>
+
+	<insert id="insertUserInfo" parameterType="SignUpBeanAlias">
+		insert into
+		userInfo(userId,userName,userPassword,userPindex,userYn)
+		values(#{userId},#{userName},#{userPassword},#{userPindex},#{userYn});
+	</insert>
+	<select id="login_check" resultType="String">
+		select userName
+		from userInfo
+		where userId=#{userId} and userPassword=#{userPassword} and userYn =
+		'Y';
+	</select>
+
+	<select id="getUserId" resultType="String">
+		select userId
+		from userInfo
+		where userId=#{userId};
+	</select>
+
+	<update id="updateUserPindex" parameterType="PlayerBeanAlias">
+		update player set
+		signup='Y' where pindex = #{userPindex};
+	</update>
+
+	<select id="selectMainVsHistory"
+		resultType="MainSearchBeanAlias">
+		select * from vsHistory where vsAgree = 'Y' order by
+		vsIndex DESC;
+	</select>
+
+	<select id="countBoard" resultType="int"
+		parameterType="MainSearchBeanAlias">
+		SELECT COUNT(*) FROM vsHistory where 1=1
+		<choose>
+			<when test="vsWriter != null and vsOpponent != null">
+				and (vsWriter=#{vsWriter} and
+				vsOpponent=#{vsOpponent})
+				or (vsWriter=#{vsOpponent} and
+				vsOpponent=#{vsWriter})
+			</when>
+			<when test="vsWriter != null and vsOpponent == null">
+				and vsWriter=#{vsWriter} or vsOpponent=#{vsWriter}
+			</when>
+		</choose>
+	</select>
+
+	<select id="selectBoard" resultType="MainSearchBeanAlias">
+		SELECT *
+		FROM (
+		SELECT A.*
+		FROM (
+		SELECT *
+		FROM vsHistory
+		<choose>
+			<when test="vsWriter != null and vsOpponent != null">
+				where (vsWriter=#{vsWriter} and vsOpponent=#{vsOpponent})
+				or
+				(vsWriter=#{vsOpponent} and vsOpponent=#{vsWriter})
+			</when>
+			<when test="vsWriter != null and vsOpponent == null">
+				where vsWriter=#{vsWriter} or vsOpponent=#{vsWriter}
+			</when>
+		</choose>
+		order by vsIndex DESC) A
+		) B
+		limit #{start} ,#{end}
+
+	</select>
+
+	<select id="countBoard2" resultType="int">
+		SELECT COUNT(*) FROM
+		vsHistory where 1=1
+	</select>
+
+	<insert id="insertHistory" parameterType="MainSearchBeanAlias">
+		insert into
+		vsHistory
+		values(#{vsIndex},#{vsWriter},#{vsOpponent},#{vsWriterScore},#{vsOpponentScore}
+		,'Y',#{vsWinner},#{vsLoser},#{vsMatch},DATE_FORMAT(now(),'%Y-%m-%d')
+		);
+	</insert>
+
+	<select id="getPlayerNum" resultType="int">
+		select COUNT(*) from
+		player
+		where signup = 'Y' order by pindex asc;
+	</select>
+
+	<select id="selectWinVsSearch" resultType="String" parameterType="MainVsSearchBeanAlias">
+		select count(vsWinner)
+		from(
+		select *
+		from(
+		select *
+		from vsHistory where vsWriter = #{player1} or vsOpponent= #{player1})A
+		where vsWriter=#{player2} or vsOpponent=#{player2})B
+		where vsWinner=#{player1} and vsMatch='fMatch';
+	</select>
+	
+	<select id="selectLossVsSearch" resultType="String" parameterType="MainVsSearchBeanAlias">
+		select count(vsLoser)
+		from(
+		select *
+		from(
+		select *
+		from vsHistory where vsWriter = #{player1} or vsOpponent= #{player1})A
+		where vsWriter=#{player2} or vsOpponent=#{player2})B
+		where vsLoser=#{player1} and vsMatch='fMatch';
+	</select>
+</mapper>
