@@ -26,4 +26,6 @@ public interface MainSearchService {
 	 public String selectLossVsSearch(MainVsSearchBean mainVsSearchBean);
 	 
 	 public String selectDrawVsSearch(MainVsSearchBean mainVsSearchBean);
+	 
+	 public void updateVsHistory(MainSearchBean mainSearchBean);
 }

@@ -15,15 +15,15 @@ import com.fifa.web.dao.MainSearchDao;
 public class MainSearchServiceImpl implements MainSearchService {
 	@Inject
 	private MainSearchDao dao;
-	
+
 	@Override
-	public List<MainSearchBean> selectMainVsHistory() throws Exception{
-		
+	public List<MainSearchBean> selectMainVsHistory() throws Exception {
+
 		System.out.println("service");
 		return dao.selectMainVsHistory();
-		
+
 	}
-	
+
 	@Override
 	public int countBoard(MainSearchBean mainSearchBean) {
 		return dao.countBoard(mainSearchBean);
@@ -33,30 +33,35 @@ public class MainSearchServiceImpl implements MainSearchService {
 	public List<PageMakerBean> selectBoard(PageMakerBean pageMakerBean) {
 		return dao.selectBoard(pageMakerBean);
 	}
-	
+
 	@Override
 	public int countBoard2() {
 		return dao.countBoard2();
 	}
-	
+
 	@Override
 	public void insertHistory(MainSearchBean mainSearchBean) {
 		dao.insertHistory(mainSearchBean);
 	}
-	
+
 	@Override
 	public String selectWinVsSearch(MainVsSearchBean mainVsSearchBean) {
 		return dao.selectWinVsSearch(mainVsSearchBean);
 	}
-	
+
 	@Override
 	public String selectLossVsSearch(MainVsSearchBean mainVsSearchBean) {
 		return dao.selectLossVsSearch(mainVsSearchBean);
 	}
-	
+
 	@Override
 	public String selectDrawVsSearch(MainVsSearchBean mainVsSearchBean) {
 		return dao.selectDrawVsSearch(mainVsSearchBean);
 	}
-	
+
+	@Override
+	public void updateVsHistory(MainSearchBean mainSearchBean) {
+		 dao.updateVsHistory(mainSearchBean);
+	}
+
 }

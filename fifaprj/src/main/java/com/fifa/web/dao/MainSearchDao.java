@@ -26,4 +26,6 @@ public interface MainSearchDao {
 	
 	public String selectDrawVsSearch(MainVsSearchBean mainVsSearchBean);
 	
+	public void updateVsHistory(MainSearchBean mainSearchBean);
+	
 }

@@ -132,4 +132,12 @@
 		where vsWriter=#{player2} or vsOpponent=#{player2})B
 		where vsLoser='무승부' and vsMatch='fMatch';
 	</select>
+	
+	<update id="updateVsHistory" parameterType="MainSearchBeanAlias">
+	update vsHistory set
+	vsWriter= #{vsWriter},vsOpponent=#{vsOpponent},
+	vsWriterScore=#{vsWriterScore},vsOpponentScore=#{vsOpponentScore}
+	,vsWinner=#{vsWinner},vsLoser=#{vsLoser},vsMatch=#{vsMatch}
+	where vsIndex=#{vsIndex};
+	</update>
 </mapper>

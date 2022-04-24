@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,9 +28,11 @@
 
 
 		<div class="table-responsive">
+		<form action="mainUpdate" method="get" >
 			<table class="table table-striped table-sm" style="text-align:center;">
 				<thead>
 					<tr>
+						<th></th>
 						<th scope="col">작성자</th>
 						<th scope="col">스코어</th>
 						<th scope="col">상대방</th>
@@ -38,6 +43,8 @@
 				<tbody>
 					<c:forEach items="${viewAll}" var="vsHistory">
 						<tr>
+						<td><button type="submit" value="${vsHistory.vsIndex}" name="vsIndex"
+					>수정</button></td>
 							<td>${vsHistory.vsWriter}</td>
 							<td>${vsHistory.vsWriterScore} vs ${vsHistory.vsOpponentScore}</td>
 							<td>${vsHistory.vsOpponent}</td>
@@ -47,6 +54,7 @@
 					</c:forEach>
 				</tbody>
 			</table>
+			</form>
 		</div>
 		
 		<div style="display: block; text-align: center;">		

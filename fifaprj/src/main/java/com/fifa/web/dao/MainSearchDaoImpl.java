@@ -68,4 +68,9 @@ public class MainSearchDaoImpl implements MainSearchDao {
 	
 		return sqlSession.selectOne(namespace+".selectDrawVsSearch",mainVsSearchBean);
 	}
+	
+	@Override
+	public void updateVsHistory(MainSearchBean mainSearchBean) {
+		sqlSession.update(namespace+".updateVsHistory",mainSearchBean);
+	}
 }

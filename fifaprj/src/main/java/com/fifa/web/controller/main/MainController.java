@@ -60,10 +60,7 @@ public class MainController {
 			@RequestParam(value = "nowPage", required = false) String nowPage,
 			@RequestParam(value = "cntPerPage", required = false) String cntPerPage) throws Exception {
 
-		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
-
-			return "error";
-		}
+		
 		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
 		model.addAttribute("getUserName", session.getAttribute("userName"));
 		String userName = request.getParameter("mySearch");
@@ -78,7 +75,7 @@ public class MainController {
 
 		}
 
-		System.out.println(mainSearchBean.getVsOpponent());
+	
 
 		int total = service.countBoard(mainSearchBean);
 		if (nowPage == null && cntPerPage == null) {
@@ -89,12 +86,54 @@ public class MainController {
 		} else if (cntPerPage == null) {
 			cntPerPage = "10";
 		}
-		System.out.println(total);
+		
 		pageMakerBean = new PageMakerBean(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage),
 				mainSearchBean.getVsWriter(), mainSearchBean.getVsOpponent());
 		model.addAttribute("paging", pageMakerBean);
 		model.addAttribute("viewAll", service.selectBoard(pageMakerBean));
 		return "main.mainAllSearch";
+	}
+	
+	@RequestMapping(value = "mainAllSearch", method = RequestMethod.POST)
+	public String mainAllSearchPost(@ModelAttribute MainSearchBean mainSearchBean,HttpSession session, Model model,
+			HttpServletRequest request) throws Exception {
+
+		
+		System.out.println(mainSearchBean.getVsIndex()+"  "+ mainSearchBean.getVsWriter());
+		return "main.mainAllSearch";
+	}
+	
+	@RequestMapping(value = "mainUpdate", method = RequestMethod.GET)
+	public String mainUpdate(MainSearchBean mainSearchBean, HttpSession session, Model model, HttpServletRequest request
+			) throws Exception {
+		
+		System.out.println(request.getParameter("vsIndex"));
+	
+		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
+		
+		return "main.mainUpdate";
+	}
+	
+	@RequestMapping(value = "mainUpdate", method = RequestMethod.POST)
+	public String mainUpdatePost(MainSearchBean mainSearchBean, HttpSession session, Model model, HttpServletRequest request
+			) throws Exception {
+		
+		System.out.println(mainSearchBean.getVsIndex()+" ");
+		if (mainSearchBean.getVsWriterScore() > mainSearchBean.getVsOpponentScore()) {
+			mainSearchBean.setVsWinner(mainSearchBean.getVsWriter());
+			mainSearchBean.setVsLoser(mainSearchBean.getVsOpponent());
+		} else if (mainSearchBean.getVsWriterScore() < mainSearchBean.getVsOpponentScore()) {
+			mainSearchBean.setVsWinner(mainSearchBean.getVsOpponent());
+			mainSearchBean.setVsLoser(mainSearchBean.getVsWriter());
+		} else {
+			mainSearchBean.setVsWinner("公铰何");
+			mainSearchBean.setVsLoser("公铰何");
+		}
+		System.out.println(mainSearchBean.getVsOpponent() + " " + mainSearchBean.getVsWriter() + " "
+				+ mainSearchBean.getVsWriterScore()+" "+mainSearchBean.getVsOpponentScore() + " " + mainSearchBean.getVsWinner() + " "
+				+ mainSearchBean.getVsLoser());	
+		service.updateVsHistory(mainSearchBean);
+		return "redirect:mainAllSearch";
 	}
 
 	@RequestMapping("mainWrite")
@@ -105,6 +144,7 @@ public class MainController {
 			return "error";
 		}
 		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
+		
 		return "main.mainWrite";
 	}
 

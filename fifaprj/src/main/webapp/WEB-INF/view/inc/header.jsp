@@ -21,8 +21,9 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="/main/mainSearch" style="background-color:#3ADF00;box-shadow:none;">EMP CLAN X FIFA4</a>
     <div class="offcanvas-collapse" id="navbarsExampleDefault" style="text-align:right;">
-  
+  	
       <form class="d-flex">
+      <button class="btn" style ="color:white; border-color:white; margin-right:10px;" onclick="location.href='/logout'; return false;">회원정보 수정</button>
         <button class="btn" style ="color:white; border-color:white;" onclick="location.href='/logout'; return false;">로그아웃</button>
       </form>
     </div>
