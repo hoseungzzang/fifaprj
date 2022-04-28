@@ -46,16 +46,20 @@ public class MainSearchServiceImpl implements MainSearchService {
 
 	@Override
 	public String selectWinVsSearch(MainVsSearchBean mainVsSearchBean) {
+		
+		
 		return dao.selectWinVsSearch(mainVsSearchBean);
 	}
 
 	@Override
 	public String selectLossVsSearch(MainVsSearchBean mainVsSearchBean) {
+		
 		return dao.selectLossVsSearch(mainVsSearchBean);
 	}
 
 	@Override
 	public String selectDrawVsSearch(MainVsSearchBean mainVsSearchBean) {
+		
 		return dao.selectDrawVsSearch(mainVsSearchBean);
 	}
 

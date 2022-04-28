@@ -10,6 +10,7 @@ public class MainVsSearchBean {
 	private int loseScore;
 	private double score;
 	private String vsMatch;
+	private String date;
 	
 	/*
 	 * public MainVsSearchBean(String player1, String player2, int winScore, int
@@ -54,5 +55,12 @@ public class MainVsSearchBean {
 	public void setVsMatch(String vsMatch) {
 		this.vsMatch = vsMatch;
 	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+	
 	
 }

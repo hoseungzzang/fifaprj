@@ -53,13 +53,13 @@ public class MainSearchDaoImpl implements MainSearchDao {
 	
 	@Override
 	public String selectWinVsSearch(MainVsSearchBean mainVsSearchBean) {
-	
+		
 		return sqlSession.selectOne(namespace+".selectWinVsSearch",mainVsSearchBean);
 	}
 	
 	@Override
 	public String selectLossVsSearch(MainVsSearchBean mainVsSearchBean) {
-	
+		
 		return sqlSession.selectOne(namespace+".selectLossVsSearch",mainVsSearchBean);
 	}
 	

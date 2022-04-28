@@ -1,6 +1,8 @@
 package com.fifa.web.controller.main;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -183,17 +185,22 @@ public class MainController {
 		}
 		List<PlayerBean> list = playerService.getPlayerName('Y');
 		ArrayList<ArrayList<String>> datas = new ArrayList<ArrayList<String>>();
-
+		
+	    	SimpleDateFormat format1 = new SimpleDateFormat ("dd");
+			Date time = new Date();
+		    SimpleDateFormat format2 = new SimpleDateFormat ("YYYY-MM-"+(Integer.parseInt(format1.format(time))-7));
+	    	mainVsSearchBean.setDate(format2.format(time));
+	    
 		/* model.addAttribute("getPlayerList", playerService.getPlayerName('Y')); */
-		System.out.println(list.size());
+		
 		for (int i = 0; i < list.size(); i++) {
 			if (!session.getAttribute("userName").equals(list.get(i).getName().toString())) {
 				mainVsSearchBean.setPlayer1((String) session.getAttribute("userName"));
 				mainVsSearchBean.setPlayer2(list.get(i).getName().toString());
-				System.out.println(list.get(i).getName().toString());
 				String winCnt = service.selectWinVsSearch(mainVsSearchBean);
 				String lossCnt = service.selectLossVsSearch(mainVsSearchBean);
 				String draw = service.selectDrawVsSearch(mainVsSearchBean);
+			
 				float score = ((float) Integer.parseInt(winCnt) / (float) (Integer.parseInt(winCnt) + Integer.parseInt(lossCnt) + Integer.parseInt(draw))) * 100;
 				ArrayList<String> data1 = new ArrayList<>();
 				data1.add((String) session.getAttribute("userName"));
@@ -231,6 +238,13 @@ public class MainController {
 		 */
 		List<PlayerBean> list = playerService.getPlayerName('Y');
 		ArrayList<ArrayList<String>> datas = new ArrayList<ArrayList<String>>();
+		
+	    if(!mainVsSearchBean.getDate().equals("all")) {//전체보기가아닐떄
+	    	SimpleDateFormat format1 = new SimpleDateFormat ("dd");
+			Date time = new Date();
+		    SimpleDateFormat format2 = new SimpleDateFormat ("YYYY-MM-"+(Integer.parseInt(format1.format(time))-Integer.parseInt(mainVsSearchBean.getDate())));
+	    	mainVsSearchBean.setDate(format2.format(time));
+	    }
 
 		/* model.addAttribute("getPlayerList", playerService.getPlayerName('Y')); */
 		System.out.println(list.size());
@@ -238,6 +252,7 @@ public class MainController {
 			if (!request.getParameter("userName1").equals(list.get(i).getName().toString())) {
 				mainVsSearchBean.setPlayer1(request.getParameter("userName1"));
 				mainVsSearchBean.setPlayer2(list.get(i).getName().toString());
+				
 				String winCnt = service.selectWinVsSearch(mainVsSearchBean);
 				String lossCnt = service.selectLossVsSearch(mainVsSearchBean);
 				String draw = service.selectDrawVsSearch(mainVsSearchBean);

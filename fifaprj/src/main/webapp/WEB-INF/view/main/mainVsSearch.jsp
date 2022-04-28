@@ -21,7 +21,7 @@
 		<div
 			class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 			<h1 class="h2">전적조회</h1>
-
+		
 		</div>
 
 
@@ -52,26 +52,31 @@
 		</div>
 	<form name="form1" method="POST">
 	<div class="btn-toolbar mb-2 mb-md-0 center" >
-				<div style="margin-left:145px;">
+				<div >
 				<select id="userName1" name="userName1" class="fifaSelectBox" style="font-size:14px;">
 				<option selected value="null">플레이어명</option>
 				<c:forEach items = "${getPlayerList}" var="player">
 				<option value="${player.name}"><c:out value="${player.name}"></c:out></option>
 				</c:forEach>
 				</select>
-				<div class="btn-group me-2">
-					<button id="btnLogin" class="btn btn-sm fontBlack" style="margin-bottom: 4px;" type="submit">플레이어 전적검색</button>
-				</div>
 				</div>
 			</div>
-			</form>
+			
+	
 			<div class="btn-toolbar mb-2 mb-md-0 center" >
 			
 			<div class="btn-group me-2">
-					<button class="btn btn-sm fontBlack" style="margin-bottom: 4px;"
-					onclick="location.href='mainVsSearch'; return false;">전체 전적검색</button>
+			<label class="" style="margin-left: 15px;"><input type="radio" id="date" name="date" value="7" checked="checked"> 7일</label>
+			<label class="" style="margin-left: 25px;"><input type="radio" id="date" name="date" value="14"> 14일</label>
+			<label class="" style="margin-left: 25px;"><input type="radio" id="date" name="date" value="all"> 전체</label>
 			</div>
+			
 			</div>
+			<div class="btn-group me-2 center">
+					<button id="btnLogin" class="btn btn-sm fontBlack" style="margin-bottom: 4px;" type="submit">플레이어 전적검색</button>
+				</div>
+	</form>
+			
 	</main>
 </body>
 </html>

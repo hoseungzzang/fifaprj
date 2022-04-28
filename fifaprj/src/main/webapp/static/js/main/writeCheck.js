@@ -1,5 +1,6 @@
 $(function() {
 	$("#btnLogin").click(function() {
+	
 		var vsWriter = $("#vsWriter").val();
 		var vsWriterScore = $("#vsWriterScore").val();
 		var vsOpponentScore = $("#vsOpponentScore").val();

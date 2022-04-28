@@ -108,7 +108,14 @@
 		select *
 		from vsHistory where vsWriter = #{player1} or vsOpponent= #{player1})A
 		where vsWriter=#{player2} or vsOpponent=#{player2})B
-		where vsWinner=#{player1} and vsMatch='fMatch';
+		<choose>
+		<when test="date.equals('all')">
+		where vsWinner=#{player1} and vsMatch='fMatch'
+		</when>
+		<otherwise>
+		where vsWinner=#{player1} and vsMatch='fMatch' and DATE(vsDate)>#{date};
+		</otherwise>
+		</choose>
 	</select>
 	
 	<select id="selectLossVsSearch" resultType="String" parameterType="MainVsSearchBeanAlias">
@@ -119,7 +126,15 @@
 		select *
 		from vsHistory where vsWriter = #{player1} or vsOpponent= #{player1})A
 		where vsWriter=#{player2} or vsOpponent=#{player2})B
-		where vsLoser=#{player1} and vsMatch='fMatch';
+		<choose>
+		<when test="date.equals('all')">
+		where vsLoser=#{player1} and vsMatch='fMatch'
+		</when>
+		<otherwise>
+		where vsLoser=#{player1} and vsMatch='fMatch' and DATE(vsDate)>#{date};
+		</otherwise>
+		</choose>
+	
 	</select>
 	
 	<select id="selectDrawVsSearch" resultType="String" parameterType="MainVsSearchBeanAlias">
@@ -130,7 +145,14 @@
 		select *
 		from vsHistory where vsWriter = #{player1} or vsOpponent= #{player1})A
 		where vsWriter=#{player2} or vsOpponent=#{player2})B
-		where vsLoser='무승부' and vsMatch='fMatch';
+		<choose>
+		<when test="date.equals('all')">
+		where vsLoser='무승부' and vsMatch='fMatch'
+		</when>
+		<otherwise>
+		where vsLoser='무승부' and vsMatch='fMatch' and DATE(vsDate)>#{date};
+		</otherwise>
+		</choose>
 	</select>
 	
 	<update id="updateVsHistory" parameterType="MainSearchBeanAlias">
