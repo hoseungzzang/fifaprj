@@ -109,18 +109,17 @@ public class MainController {
 	public String mainUpdate(MainSearchBean mainSearchBean, HttpSession session, Model model, HttpServletRequest request
 			) throws Exception {
 		
-		System.out.println(request.getParameter("vsIndex"));
 	
+		mainSearchBean.setVsIndex(Integer.parseInt(request.getParameter("vsIndex")));
 		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
-		
+		model.addAttribute("vsIndex",request.getParameter("vsIndex") );
 		return "main.mainUpdate";
 	}
 	
 	@RequestMapping(value = "mainUpdate", method = RequestMethod.POST)
 	public String mainUpdatePost(MainSearchBean mainSearchBean, HttpSession session, Model model, HttpServletRequest request
 			) throws Exception {
-		
-		System.out.println(mainSearchBean.getVsIndex()+" ");
+	
 		if (mainSearchBean.getVsWriterScore() > mainSearchBean.getVsOpponentScore()) {
 			mainSearchBean.setVsWinner(mainSearchBean.getVsWriter());
 			mainSearchBean.setVsLoser(mainSearchBean.getVsOpponent());
@@ -131,9 +130,9 @@ public class MainController {
 			mainSearchBean.setVsWinner("公铰何");
 			mainSearchBean.setVsLoser("公铰何");
 		}
-		System.out.println(mainSearchBean.getVsOpponent() + " " + mainSearchBean.getVsWriter() + " "
+		/*System.out.println(mainSearchBean.getVsWriter() + " " + mainSearchBean.getVsOpponent() + " "
 				+ mainSearchBean.getVsWriterScore()+" "+mainSearchBean.getVsOpponentScore() + " " + mainSearchBean.getVsWinner() + " "
-				+ mainSearchBean.getVsLoser());	
+				+ mainSearchBean.getVsLoser());	*/
 		service.updateVsHistory(mainSearchBean);
 		return "redirect:mainAllSearch";
 	}
