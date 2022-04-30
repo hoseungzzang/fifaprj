@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fifa.web.bean.CalendarCalcBean;
 import com.fifa.web.bean.MainSearchBean;
 import com.fifa.web.bean.MainVsSearchBean;
 import com.fifa.web.bean.PageMakerBean;
@@ -62,7 +63,6 @@ public class MainController {
 			@RequestParam(value = "nowPage", required = false) String nowPage,
 			@RequestParam(value = "cntPerPage", required = false) String cntPerPage) throws Exception {
 
-		
 		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
 		model.addAttribute("getUserName", session.getAttribute("userName"));
 		String userName = request.getParameter("mySearch");
@@ -77,8 +77,6 @@ public class MainController {
 
 		}
 
-	
-
 		int total = service.countBoard(mainSearchBean);
 		if (nowPage == null && cntPerPage == null) {
 			nowPage = "1";
@@ -88,38 +86,36 @@ public class MainController {
 		} else if (cntPerPage == null) {
 			cntPerPage = "10";
 		}
-		
+
 		pageMakerBean = new PageMakerBean(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage),
 				mainSearchBean.getVsWriter(), mainSearchBean.getVsOpponent());
 		model.addAttribute("paging", pageMakerBean);
 		model.addAttribute("viewAll", service.selectBoard(pageMakerBean));
 		return "main.mainAllSearch";
 	}
-	
+
 	@RequestMapping(value = "mainAllSearch", method = RequestMethod.POST)
-	public String mainAllSearchPost(@ModelAttribute MainSearchBean mainSearchBean,HttpSession session, Model model,
+	public String mainAllSearchPost(@ModelAttribute MainSearchBean mainSearchBean, HttpSession session, Model model,
 			HttpServletRequest request) throws Exception {
 
-		
-		System.out.println(mainSearchBean.getVsIndex()+"  "+ mainSearchBean.getVsWriter());
+		System.out.println(mainSearchBean.getVsIndex() + "  " + mainSearchBean.getVsWriter());
 		return "main.mainAllSearch";
 	}
-	
+
 	@RequestMapping(value = "mainUpdate", method = RequestMethod.GET)
-	public String mainUpdate(MainSearchBean mainSearchBean, HttpSession session, Model model, HttpServletRequest request
-			) throws Exception {
-		
-	
+	public String mainUpdate(MainSearchBean mainSearchBean, HttpSession session, Model model,
+			HttpServletRequest request) throws Exception {
+
 		mainSearchBean.setVsIndex(Integer.parseInt(request.getParameter("vsIndex")));
 		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
-		model.addAttribute("vsIndex",request.getParameter("vsIndex") );
+		model.addAttribute("vsIndex", request.getParameter("vsIndex"));
 		return "main.mainUpdate";
 	}
-	
+
 	@RequestMapping(value = "mainUpdate", method = RequestMethod.POST)
-	public String mainUpdatePost(MainSearchBean mainSearchBean, HttpSession session, Model model, HttpServletRequest request
-			) throws Exception {
-	
+	public String mainUpdatePost(MainSearchBean mainSearchBean, HttpSession session, Model model,
+			HttpServletRequest request) throws Exception {
+
 		if (mainSearchBean.getVsWriterScore() > mainSearchBean.getVsOpponentScore()) {
 			mainSearchBean.setVsWinner(mainSearchBean.getVsWriter());
 			mainSearchBean.setVsLoser(mainSearchBean.getVsOpponent());
@@ -130,9 +126,12 @@ public class MainController {
 			mainSearchBean.setVsWinner("무승부");
 			mainSearchBean.setVsLoser("무승부");
 		}
-		/*System.out.println(mainSearchBean.getVsWriter() + " " + mainSearchBean.getVsOpponent() + " "
-				+ mainSearchBean.getVsWriterScore()+" "+mainSearchBean.getVsOpponentScore() + " " + mainSearchBean.getVsWinner() + " "
-				+ mainSearchBean.getVsLoser());	*/
+		/*
+		 * System.out.println(mainSearchBean.getVsWriter() + " " +
+		 * mainSearchBean.getVsOpponent() + " " +
+		 * mainSearchBean.getVsWriterScore()+" "+mainSearchBean.getVsOpponentScore() +
+		 * " " + mainSearchBean.getVsWinner() + " " + mainSearchBean.getVsLoser());
+		 */
 		service.updateVsHistory(mainSearchBean);
 		return "redirect:mainAllSearch";
 	}
@@ -145,7 +144,7 @@ public class MainController {
 			return "error";
 		}
 		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
-		
+
 		return "main.mainWrite";
 	}
 
@@ -167,7 +166,6 @@ public class MainController {
 			mainSearchBean.setVsWinner("무승부");
 			mainSearchBean.setVsLoser("무승부");
 		}
-			
 
 		System.out.println(mainSearchBean.getVsOpponent() + " " + mainSearchBean.getVsWriter() + " "
 				+ mainSearchBean.getVsWriterScore());
@@ -184,14 +182,12 @@ public class MainController {
 		}
 		List<PlayerBean> list = playerService.getPlayerName('Y');
 		ArrayList<ArrayList<String>> datas = new ArrayList<ArrayList<String>>();
-		
-	    	SimpleDateFormat format1 = new SimpleDateFormat ("dd");
-			Date time = new Date();
-		    SimpleDateFormat format2 = new SimpleDateFormat ("YYYY-MM-"+(Integer.parseInt(format1.format(time))-7));
-	    	mainVsSearchBean.setDate(format2.format(time));
-	    
+
+		CalendarCalcBean cal = new CalendarCalcBean();
+		String date = cal.dateCalc("7");
+		mainVsSearchBean.setDate(date);
 		/* model.addAttribute("getPlayerList", playerService.getPlayerName('Y')); */
-		
+
 		for (int i = 0; i < list.size(); i++) {
 			if (!session.getAttribute("userName").equals(list.get(i).getName().toString())) {
 				mainVsSearchBean.setPlayer1((String) session.getAttribute("userName"));
@@ -199,8 +195,10 @@ public class MainController {
 				String winCnt = service.selectWinVsSearch(mainVsSearchBean);
 				String lossCnt = service.selectLossVsSearch(mainVsSearchBean);
 				String draw = service.selectDrawVsSearch(mainVsSearchBean);
-			
-				float score = ((float) Integer.parseInt(winCnt) / (float) (Integer.parseInt(winCnt) + Integer.parseInt(lossCnt) + Integer.parseInt(draw))) * 100;
+
+				float score = ((float) Integer.parseInt(winCnt)
+						/ (float) (Integer.parseInt(winCnt) + Integer.parseInt(lossCnt) + Integer.parseInt(draw)))
+						* 100;
 				ArrayList<String> data1 = new ArrayList<>();
 				data1.add((String) session.getAttribute("userName"));
 				data1.add(list.get(i).getName().toString());
@@ -210,7 +208,7 @@ public class MainController {
 				if (winCnt.equals("0") && lossCnt.equals("0")) {
 					data1.add("0.0");
 				} else
-					data1.add(String.format("%.1f",score));
+					data1.add(String.format("%.1f", score));
 				data1.add("친선전");
 				datas.add(data1);
 			}
@@ -229,21 +227,20 @@ public class MainController {
 	@RequestMapping(value = "mainVsSearch", method = RequestMethod.POST)
 	public String mainVsSearchPost(HttpSession session, Model model, HttpServletRequest request,
 			MainVsSearchBean mainVsSearchBean) throws Exception {
-		/*
-		 * if (request.getHeader("referer") == null || session.getAttribute("userName")
-		 * == null) {
-		 * 
-		 * return "error"; }
-		 */
+
+		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
+
+			return "error";
+		}
+
 		List<PlayerBean> list = playerService.getPlayerName('Y');
 		ArrayList<ArrayList<String>> datas = new ArrayList<ArrayList<String>>();
-		
-	    if(!mainVsSearchBean.getDate().equals("all")) {//전체보기가아닐떄
-	    	SimpleDateFormat format1 = new SimpleDateFormat ("dd");
-			Date time = new Date();
-		    SimpleDateFormat format2 = new SimpleDateFormat ("YYYY-MM-"+(Integer.parseInt(format1.format(time))-Integer.parseInt(mainVsSearchBean.getDate())));
-	    	mainVsSearchBean.setDate(format2.format(time));
-	    }
+
+		if (!mainVsSearchBean.getDate().equals("all")) {// 전체보기가아닐떄
+			CalendarCalcBean cal = new CalendarCalcBean();
+			String date = cal.dateCalc(mainVsSearchBean.getDate());
+			mainVsSearchBean.setDate(date);
+		}
 
 		/* model.addAttribute("getPlayerList", playerService.getPlayerName('Y')); */
 		System.out.println(list.size());
@@ -251,11 +248,13 @@ public class MainController {
 			if (!request.getParameter("userName1").equals(list.get(i).getName().toString())) {
 				mainVsSearchBean.setPlayer1(request.getParameter("userName1"));
 				mainVsSearchBean.setPlayer2(list.get(i).getName().toString());
-				
+
 				String winCnt = service.selectWinVsSearch(mainVsSearchBean);
 				String lossCnt = service.selectLossVsSearch(mainVsSearchBean);
 				String draw = service.selectDrawVsSearch(mainVsSearchBean);
-				float score = ((float) Integer.parseInt(winCnt) / (float) (Integer.parseInt(winCnt) + Integer.parseInt(lossCnt) + Integer.parseInt(draw))) * 100;
+				float score = ((float) Integer.parseInt(winCnt)
+						/ (float) (Integer.parseInt(winCnt) + Integer.parseInt(lossCnt) + Integer.parseInt(draw)))
+						* 100;
 				ArrayList<String> data1 = new ArrayList<>();
 				data1.add(mainVsSearchBean.getPlayer1());
 				data1.add(list.get(i).getName().toString());
@@ -265,7 +264,7 @@ public class MainController {
 				if (winCnt.equals("0") && lossCnt.equals("0")) {
 					data1.add("0.0");
 				} else
-					data1.add(String.format("%.1f",score));
+					data1.add(String.format("%.1f", score));
 				data1.add("친선전");
 				datas.add(data1);
 			}
