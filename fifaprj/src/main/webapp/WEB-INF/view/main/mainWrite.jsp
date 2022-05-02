@@ -27,6 +27,7 @@
 <link href="/css/bootstrap.min.css" rel="stylesheet">
 <link href="/css/style.css" rel="stylesheet">
 <script type="text/javascript" src="/js/main/writeCheck.js"></script>
+<script type="text/javascript" src="/js/main/writeSelect.js"></script>
 <!-- Favicons -->
 
 
@@ -43,7 +44,7 @@
 	<main class="form-signin">
 		<form name="form1" method="post" >
 			<img src="../../images/emplogo.png" alt="" width="200" height="100">
-			<div class="form-floating">
+			<div class="form-floating" id="inputForm">
 
 				<select name="vsWriter" id="vsWriter" class="fifaSelectBox"
 					style="font-size: 14px;margin-left:100px;">
@@ -72,7 +73,12 @@
 				<option value="lMatch">리그전</option>
 				</select>
 			</div>
-			<button class="fifaButton" type="submit" id="btnLogin">등록하기</button>
+			<div id="field"></div>
+			<input type="button" class="fifaButton" onclick="addForm();" value="입력 폼 추가하기">
+			<br>
+			<input type="button" class="fifaButton" onclick="removeForm();" value="입력 폼 삭제하기">
+			<br>
+			<button class="fifaButton" id="btnLogin">등록하기</button>
 			<br>
 			<button class="fifaButton"
 				onclick="location.href='mainSearch'; return false;">돌아가기</button>

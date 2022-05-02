@@ -3,7 +3,10 @@ package com.fifa.web.controller.main;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fifa.web.bean.CalendarCalcBean;
 import com.fifa.web.bean.MainSearchBean;
@@ -139,22 +144,71 @@ public class MainController {
 	@RequestMapping("mainWrite")
 	public String mainWriteGet(HttpSession session, Model model, HttpServletRequest request,
 			MainSearchBean mainSearchBean) throws Exception {
-		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
-
-			return "error";
-		}
+		/*
+		 * if (request.getHeader("referer") == null || session.getAttribute("userName")
+		 * == null) {
+		 * 
+		 * return "error"; }
+		 */
 		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
 
 		return "main.mainWrite";
 	}
 
 	@RequestMapping(value = "mainWrite", method = RequestMethod.POST)
-	public String mainWritePost(HttpSession session, Model model, HttpServletRequest request,
-			MainSearchBean mainSearchBean) throws Exception {
-		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
+	public String mainWritePost(@RequestParam(value = "grparr", required = false) List<String> list,
+			HttpSession session, Model model, HttpServletRequest request, MainSearchBean mainSearchBean)
+			throws Exception {
+		int cnt=1;
+		if (list != null) {
+			if(list.size()==5) {
+				cnt=1;
+			}
+			else cnt=list.size();
+				for (int i = 0; i < cnt; i++) {
+					if(cnt==1) {//窜扒
+						mainSearchBean.setVsWriter(list.get(0));
+						mainSearchBean.setVsWriterScore(Integer.parseInt(list.get(1)));
+						mainSearchBean.setVsOpponentScore(Integer.parseInt(list.get(2)));
+						mainSearchBean.setVsOpponent(list.get(3));
+						mainSearchBean.setVsMatch(list.get(4));
+					}
+					else {//汗荐
+						StringTokenizer tokenizer1 = new StringTokenizer(list.get(i), ",");
+						mainSearchBean.setVsWriter(tokenizer1.nextToken());
+						mainSearchBean.setVsWriterScore(Integer.parseInt(tokenizer1.nextToken()));
+						mainSearchBean.setVsOpponentScore(Integer.parseInt(tokenizer1.nextToken()));
+						mainSearchBean.setVsOpponent(tokenizer1.nextToken());
+						mainSearchBean.setVsMatch(tokenizer1.nextToken());
+					}
+					
+
+					mainSearchBean.setVsIndex(service.countBoard2() + 1);
+					System.out.println(mainSearchBean.getVsIndex());
+					if (mainSearchBean.getVsWriterScore() > mainSearchBean.getVsOpponentScore()) {
+						mainSearchBean.setVsWinner(mainSearchBean.getVsWriter());
+						mainSearchBean.setVsLoser(mainSearchBean.getVsOpponent());
+					} else if (mainSearchBean.getVsWriterScore() < mainSearchBean.getVsOpponentScore()) {
+						mainSearchBean.setVsWinner(mainSearchBean.getVsOpponent());
+						mainSearchBean.setVsLoser(mainSearchBean.getVsWriter());
+					} else {
+						mainSearchBean.setVsWinner("公铰何");
+						mainSearchBean.setVsLoser("公铰何");
+					}
+
+					System.out.println(mainSearchBean.getVsWriter() + " " + mainSearchBean.getVsOpponent() + " " + mainSearchBean.getVsWriterScore());
+					service.insertHistory(mainSearchBean);
+
+				}
+			
+
+		}
+
+		/*if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
 
 			return "error";
 		}
+
 		mainSearchBean.setVsIndex(service.countBoard2() + 1);
 		if (mainSearchBean.getVsWriterScore() > mainSearchBean.getVsOpponentScore()) {
 			mainSearchBean.setVsWinner(mainSearchBean.getVsWriter());
@@ -169,7 +223,8 @@ public class MainController {
 
 		System.out.println(mainSearchBean.getVsOpponent() + " " + mainSearchBean.getVsWriter() + " "
 				+ mainSearchBean.getVsWriterScore());
-		service.insertHistory(mainSearchBean);
+		service.insertHistory(mainSearchBean);*/
+
 		return "redirect:mainWrite";
 	}
 
