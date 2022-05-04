@@ -63,15 +63,24 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "mainAllSearch", method = RequestMethod.GET)
-	public String mainAllSearchGet(PageMakerBean pageMakerBean, HttpSession session, Model model,
-			HttpServletRequest request, MainSearchBean mainSearchBean, PlayerBean playerBean,
+	public String mainAllSearchGet(@RequestParam(value = "selectVsMatch", defaultValue = "fMatch") String vsMatch,
+			PageMakerBean pageMakerBean, HttpSession session, Model model, HttpServletRequest request,
+			MainSearchBean mainSearchBean, PlayerBean playerBean,
 			@RequestParam(value = "nowPage", required = false) String nowPage,
 			@RequestParam(value = "cntPerPage", required = false) String cntPerPage) throws Exception {
+		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
+
+			return "error";
+		}
 
 		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
 		model.addAttribute("getUserName", session.getAttribute("userName"));
+		model.addAttribute("getVsType", vsMatch);
 		String userName = request.getParameter("mySearch");
 
+		mainSearchBean.setVsMatch(vsMatch);
+
+		System.out.println("mainctr  " + mainSearchBean.getVsMatch());
 		if (userName == null && request.getParameter("userName1") != null
 				&& request.getParameter("userName2") != null) {
 			mainSearchBean.setVsWriter(request.getParameter("userName1"));
@@ -83,6 +92,8 @@ public class MainController {
 		}
 
 		int total = service.countBoard(mainSearchBean);
+		System.out.println(total);
+
 		if (nowPage == null && cntPerPage == null) {
 			nowPage = "1";
 			cntPerPage = "10";
@@ -93,7 +104,7 @@ public class MainController {
 		}
 
 		pageMakerBean = new PageMakerBean(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage),
-				mainSearchBean.getVsWriter(), mainSearchBean.getVsOpponent());
+				mainSearchBean.getVsWriter(), mainSearchBean.getVsOpponent(), mainSearchBean.getVsMatch());
 		model.addAttribute("paging", pageMakerBean);
 		model.addAttribute("viewAll", service.selectBoard(pageMakerBean));
 		return "main.mainAllSearch";
@@ -102,7 +113,10 @@ public class MainController {
 	@RequestMapping(value = "mainAllSearch", method = RequestMethod.POST)
 	public String mainAllSearchPost(@ModelAttribute MainSearchBean mainSearchBean, HttpSession session, Model model,
 			HttpServletRequest request) throws Exception {
+		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
 
+			return "error";
+		}
 		System.out.println(mainSearchBean.getVsIndex() + "  " + mainSearchBean.getVsWriter());
 		return "main.mainAllSearch";
 	}
@@ -111,6 +125,10 @@ public class MainController {
 	public String mainUpdate(MainSearchBean mainSearchBean, HttpSession session, Model model,
 			HttpServletRequest request) throws Exception {
 
+		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
+
+			return "error";
+		}
 		mainSearchBean.setVsIndex(Integer.parseInt(request.getParameter("vsIndex")));
 		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
 		model.addAttribute("vsIndex", request.getParameter("vsIndex"));
@@ -121,6 +139,10 @@ public class MainController {
 	public String mainUpdatePost(MainSearchBean mainSearchBean, HttpSession session, Model model,
 			HttpServletRequest request) throws Exception {
 
+		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
+
+			return "error";
+		}
 		if (mainSearchBean.getVsWriterScore() > mainSearchBean.getVsOpponentScore()) {
 			mainSearchBean.setVsWinner(mainSearchBean.getVsWriter());
 			mainSearchBean.setVsLoser(mainSearchBean.getVsOpponent());
@@ -144,12 +166,12 @@ public class MainController {
 	@RequestMapping("mainWrite")
 	public String mainWriteGet(HttpSession session, Model model, HttpServletRequest request,
 			MainSearchBean mainSearchBean) throws Exception {
-		/*
-		 * if (request.getHeader("referer") == null || session.getAttribute("userName")
-		 * == null) {
-		 * 
-		 * return "error"; }
-		 */
+
+		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
+
+			return "error";
+		}
+
 		model.addAttribute("getPlayerList", playerService.getPlayerName('Y'));
 
 		return "main.mainWrite";
@@ -159,71 +181,53 @@ public class MainController {
 	public String mainWritePost(@RequestParam(value = "grparr", required = false) List<String> list,
 			HttpSession session, Model model, HttpServletRequest request, MainSearchBean mainSearchBean)
 			throws Exception {
-		int cnt=1;
-		if (list != null) {
-			if(list.size()==5) {
-				cnt=1;
-			}
-			else cnt=list.size();
-				for (int i = 0; i < cnt; i++) {
-					if(cnt==1) {//窜扒
-						mainSearchBean.setVsWriter(list.get(0));
-						mainSearchBean.setVsWriterScore(Integer.parseInt(list.get(1)));
-						mainSearchBean.setVsOpponentScore(Integer.parseInt(list.get(2)));
-						mainSearchBean.setVsOpponent(list.get(3));
-						mainSearchBean.setVsMatch(list.get(4));
-					}
-					else {//汗荐
-						StringTokenizer tokenizer1 = new StringTokenizer(list.get(i), ",");
-						mainSearchBean.setVsWriter(tokenizer1.nextToken());
-						mainSearchBean.setVsWriterScore(Integer.parseInt(tokenizer1.nextToken()));
-						mainSearchBean.setVsOpponentScore(Integer.parseInt(tokenizer1.nextToken()));
-						mainSearchBean.setVsOpponent(tokenizer1.nextToken());
-						mainSearchBean.setVsMatch(tokenizer1.nextToken());
-					}
-					
-
-					mainSearchBean.setVsIndex(service.countBoard2() + 1);
-					System.out.println(mainSearchBean.getVsIndex());
-					if (mainSearchBean.getVsWriterScore() > mainSearchBean.getVsOpponentScore()) {
-						mainSearchBean.setVsWinner(mainSearchBean.getVsWriter());
-						mainSearchBean.setVsLoser(mainSearchBean.getVsOpponent());
-					} else if (mainSearchBean.getVsWriterScore() < mainSearchBean.getVsOpponentScore()) {
-						mainSearchBean.setVsWinner(mainSearchBean.getVsOpponent());
-						mainSearchBean.setVsLoser(mainSearchBean.getVsWriter());
-					} else {
-						mainSearchBean.setVsWinner("公铰何");
-						mainSearchBean.setVsLoser("公铰何");
-					}
-
-					System.out.println(mainSearchBean.getVsWriter() + " " + mainSearchBean.getVsOpponent() + " " + mainSearchBean.getVsWriterScore());
-					service.insertHistory(mainSearchBean);
-
-				}
-			
-
-		}
-
-		/*if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
+		if (request.getHeader("referer") == null || session.getAttribute("userName") == null) {
 
 			return "error";
 		}
 
-		mainSearchBean.setVsIndex(service.countBoard2() + 1);
-		if (mainSearchBean.getVsWriterScore() > mainSearchBean.getVsOpponentScore()) {
-			mainSearchBean.setVsWinner(mainSearchBean.getVsWriter());
-			mainSearchBean.setVsLoser(mainSearchBean.getVsOpponent());
-		} else if (mainSearchBean.getVsWriterScore() < mainSearchBean.getVsOpponentScore()) {
-			mainSearchBean.setVsWinner(mainSearchBean.getVsOpponent());
-			mainSearchBean.setVsLoser(mainSearchBean.getVsWriter());
-		} else {
-			mainSearchBean.setVsWinner("公铰何");
-			mainSearchBean.setVsLoser("公铰何");
-		}
+		int cnt = 1;
+		if (list != null) {
+			if (list.size() == 5) {
+				cnt = 1;
+			} else
+				cnt = list.size();
+			for (int i = 0; i < cnt; i++) {
+				if (cnt == 1) {// 窜扒
+					mainSearchBean.setVsWriter(list.get(0));
+					mainSearchBean.setVsWriterScore(Integer.parseInt(list.get(1)));
+					mainSearchBean.setVsOpponentScore(Integer.parseInt(list.get(2)));
+					mainSearchBean.setVsOpponent(list.get(3));
+					mainSearchBean.setVsMatch(list.get(4));
+				} else {// 汗荐
+					StringTokenizer tokenizer1 = new StringTokenizer(list.get(i), ",");
+					mainSearchBean.setVsWriter(tokenizer1.nextToken());
+					mainSearchBean.setVsWriterScore(Integer.parseInt(tokenizer1.nextToken()));
+					mainSearchBean.setVsOpponentScore(Integer.parseInt(tokenizer1.nextToken()));
+					mainSearchBean.setVsOpponent(tokenizer1.nextToken());
+					mainSearchBean.setVsMatch(tokenizer1.nextToken());
+				}
 
-		System.out.println(mainSearchBean.getVsOpponent() + " " + mainSearchBean.getVsWriter() + " "
-				+ mainSearchBean.getVsWriterScore());
-		service.insertHistory(mainSearchBean);*/
+				mainSearchBean.setVsIndex(service.countBoard2() + 1);
+				System.out.println(mainSearchBean.getVsIndex());
+				if (mainSearchBean.getVsWriterScore() > mainSearchBean.getVsOpponentScore()) {
+					mainSearchBean.setVsWinner(mainSearchBean.getVsWriter());
+					mainSearchBean.setVsLoser(mainSearchBean.getVsOpponent());
+				} else if (mainSearchBean.getVsWriterScore() < mainSearchBean.getVsOpponentScore()) {
+					mainSearchBean.setVsWinner(mainSearchBean.getVsOpponent());
+					mainSearchBean.setVsLoser(mainSearchBean.getVsWriter());
+				} else {
+					mainSearchBean.setVsWinner("公铰何");
+					mainSearchBean.setVsLoser("公铰何");
+				}
+
+				System.out.println(mainSearchBean.getVsWriter() + " " + mainSearchBean.getVsOpponent() + " "
+						+ mainSearchBean.getVsWriterScore());
+				service.insertHistory(mainSearchBean);
+
+			}
+
+		}
 
 		return "redirect:mainWrite";
 	}

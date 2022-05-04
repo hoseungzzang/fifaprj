@@ -23,7 +23,7 @@
   <definition name="main.*" template="/WEB-INF/view/main/{1}.jsp">
     <put-attribute name="title" value="전적검색" />
     <put-attribute name="header" value="/WEB-INF/view/inc/header.jsp" />
-  <!--   <put-attribute name="body" value="/WEB-INF/view/customer/notice/{1}.jsp" /> Wildcard 사용
-    <put-attribute name="footer" value="/WEB-INF/view/inc/footer.jsp" /> -->
+    <put-attribute name="body" value="/WEB-INF/view/inc/body.jsp" />
+<!--     <put-attribute name="footer" value="/WEB-INF/view/inc/footer.jsp" /> --> 
   </definition>
 </tiles-definitions>

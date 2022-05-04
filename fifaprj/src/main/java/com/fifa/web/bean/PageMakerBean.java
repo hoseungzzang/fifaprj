@@ -8,9 +8,10 @@ public class PageMakerBean {
 		private String vsWriter;
 		private String vsOpponent;
 		private String searchTypeKeyword;
+		private String vsMatch;
 		public PageMakerBean() {
 		}
-		public PageMakerBean(int total, int nowPage, int cntPerPage, String vsWriter, String vsOpponent) {
+		public PageMakerBean(int total, int nowPage, int cntPerPage, String vsWriter, String vsOpponent,String vsMatch) {
 			setNowPage(nowPage); //1
 			setCntPerPage(cntPerPage);//10
 			setTotal(total);//20
@@ -20,6 +21,7 @@ public class PageMakerBean {
 			setVsWriter(vsWriter);
 			setVsOpponent(vsOpponent);
 			setSearchTypeKeyword(vsWriter,vsOpponent);
+			setVsMatch(vsMatch);
 		}
 		// 제일 마지막 페이지 계산
 		public void calcLastPage(int total, int cntPerPage) {
@@ -119,6 +121,12 @@ public class PageMakerBean {
 			this.vsOpponent = vsOpponent;
 		}
 		
+		public String getVsMatch() {
+			return vsMatch;
+		}
+		public void setVsMatch(String vsMatch) {
+			this.vsMatch = vsMatch;
+		}
 		@Override
 		public String toString() {
 			return "PagingVO [nowPage=" + nowPage + ", startPage=" + startPage + ", endPage=" + endPage + ", total=" + total

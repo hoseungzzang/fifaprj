@@ -44,7 +44,7 @@
 
 	<select id="countBoard" resultType="int"
 		parameterType="MainSearchBeanAlias">
-		SELECT COUNT(*) FROM vsHistory where 1=1
+		SELECT COUNT(*) FROM vsHistory where 1=1 and vsMatch=#{vsMatch}
 		<choose>
 			<when test="vsWriter != null and vsOpponent != null">
 				and (vsWriter=#{vsWriter} and
@@ -65,14 +65,15 @@
 		FROM (
 		SELECT *
 		FROM vsHistory
+		WHERE vsMatch=#{vsMatch}
 		<choose>
 			<when test="vsWriter != null and vsOpponent != null">
-				where (vsWriter=#{vsWriter} and vsOpponent=#{vsOpponent})
+				and (vsWriter=#{vsWriter} and vsOpponent=#{vsOpponent})
 				or
 				(vsWriter=#{vsOpponent} and vsOpponent=#{vsWriter})
 			</when>
 			<when test="vsWriter != null and vsOpponent == null">
-				where vsWriter=#{vsWriter} or vsOpponent=#{vsWriter}
+				 and (vsWriter=#{vsWriter} or vsOpponent=#{vsWriter})
 			</when>
 		</choose>
 		order by vsIndex DESC) A
