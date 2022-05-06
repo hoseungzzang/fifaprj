@@ -20,7 +20,7 @@ public class PageMakerBean {
 			calcStartEnd(getNowPage(), getCntPerPage());
 			setVsWriter(vsWriter);
 			setVsOpponent(vsOpponent);
-			setSearchTypeKeyword(vsWriter,vsOpponent);
+			setSearchTypeKeyword(vsWriter,vsOpponent,vsMatch);
 			setVsMatch(vsMatch);
 		}
 		// 제일 마지막 페이지 계산
@@ -48,15 +48,16 @@ public class PageMakerBean {
 		public String getSearchTypeKeyword() {
 			return searchTypeKeyword;
 		}
-		public void setSearchTypeKeyword(String vsWriter,String vsOpponent) {
+		public void setSearchTypeKeyword(String vsWriter,String vsOpponent,String vsMatch) {
 			if(vsWriter != null && vsOpponent ==null) {
-				searchTypeKeyword = "&mySearch="+vsWriter;
+				searchTypeKeyword = "&mySearch="+vsWriter+"&selectVsMatch="+vsMatch;
 				System.out.println(searchTypeKeyword);
 			}
 			else if(vsWriter != null && vsOpponent !=null) {
-				searchTypeKeyword = "&userName1="+vsWriter+"&userName2="+vsOpponent;
+				searchTypeKeyword = "&userName1="+vsWriter+"&userName2="+vsOpponent+"&selectVsMatch="+vsMatch;
 				System.out.println(searchTypeKeyword);
 			}
+			else searchTypeKeyword="&selectVsMatch="+vsMatch;
 			
 		}
 		public int getNowPage() {

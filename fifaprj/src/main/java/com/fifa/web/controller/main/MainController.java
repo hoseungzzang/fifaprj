@@ -53,10 +53,6 @@ public class MainController {
 		}
 
 		model.addAttribute("getPlayerList", playerService.getPlayerNum());
-		System.out.println(playerBean.getName());
-		System.out.println();
-		System.out.println(session.getId());
-		System.out.println(session);
 		session = request.getSession();
 		System.out.println(session.getAttribute("userName"));
 		return "main.mainSearch";
@@ -79,7 +75,7 @@ public class MainController {
 		String userName = request.getParameter("mySearch");
 
 		mainSearchBean.setVsMatch(vsMatch);
-
+		System.out.println("ctr selectVsMatch  " + request.getParameter("selectVsMatch"));
 		System.out.println("mainctr  " + mainSearchBean.getVsMatch());
 		if (userName == null && request.getParameter("userName1") != null
 				&& request.getParameter("userName2") != null) {
@@ -102,7 +98,7 @@ public class MainController {
 		} else if (cntPerPage == null) {
 			cntPerPage = "10";
 		}
-
+	
 		pageMakerBean = new PageMakerBean(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage),
 				mainSearchBean.getVsWriter(), mainSearchBean.getVsOpponent(), mainSearchBean.getVsMatch());
 		model.addAttribute("paging", pageMakerBean);

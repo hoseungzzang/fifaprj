@@ -47,13 +47,12 @@
 		SELECT COUNT(*) FROM vsHistory where 1=1 and vsMatch=#{vsMatch}
 		<choose>
 			<when test="vsWriter != null and vsOpponent != null">
-				and (vsWriter=#{vsWriter} and
-				vsOpponent=#{vsOpponent})
-				or (vsWriter=#{vsOpponent} and
-				vsOpponent=#{vsWriter})
+				and (vsWriter=#{vsWriter} or vsWriter=#{vsOpponent})
+				and
+				(vsOpponent=#{vsWriter} or vsOpponent=#{vsOpponent})
 			</when>
 			<when test="vsWriter != null and vsOpponent == null">
-				and vsWriter=#{vsWriter} or vsOpponent=#{vsWriter}
+				and (vsWriter=#{vsWriter} or vsOpponent=#{vsWriter})
 			</when>
 		</choose>
 	</select>
@@ -68,9 +67,9 @@
 		WHERE vsMatch=#{vsMatch}
 		<choose>
 			<when test="vsWriter != null and vsOpponent != null">
-				and (vsWriter=#{vsWriter} and vsOpponent=#{vsOpponent})
-				or
-				(vsWriter=#{vsOpponent} and vsOpponent=#{vsWriter})
+				and (vsWriter=#{vsWriter} or vsWriter=#{vsOpponent})
+				and
+				(vsOpponent=#{vsWriter} or vsOpponent=#{vsOpponent})
 			</when>
 			<when test="vsWriter != null and vsOpponent == null">
 				 and (vsWriter=#{vsWriter} or vsOpponent=#{vsWriter})
