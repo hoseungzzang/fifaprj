@@ -11,6 +11,7 @@
         <typeAlias alias="MainSearchBeanAlias" type="com.fifa.web.bean.MainSearchBean"/>
         <typeAlias alias="PageMakerBeanAlias" type="com.fifa.web.bean.PageMakerBean"/>
         <typeAlias alias="MainVsSearchBeanAlias" type="com.fifa.web.bean.MainVsSearchBean"/>
+        <typeAlias alias="PointCalcBeanAlias" type="com.fifa.web.bean.PointCalcBean"/>
     </typeAliases>
 
 

@@ -50,5 +50,12 @@ public class PlayerDaoImpl implements PlayerDao {
 	public int getPlayerNum() {
 		return sqlSession.selectOne(namespace+".getPlayerNum");
 	 }
+	
+	@Override
+	public List<String> selectUserCount() {
+		return sqlSession.selectList(namespace+".selectUserCount");
+	 }
+	
+	
 
 }

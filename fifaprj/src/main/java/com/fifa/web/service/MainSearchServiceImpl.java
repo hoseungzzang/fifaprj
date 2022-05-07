@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.fifa.web.bean.MainSearchBean;
 import com.fifa.web.bean.MainVsSearchBean;
 import com.fifa.web.bean.PageMakerBean;
+import com.fifa.web.bean.PointCalcBean;
 import com.fifa.web.dao.MainSearchDao;
 
 @Service
@@ -67,5 +68,20 @@ public class MainSearchServiceImpl implements MainSearchService {
 	public void updateVsHistory(MainSearchBean mainSearchBean) {
 		 dao.updateVsHistory(mainSearchBean);
 	}
+	
+	@Override
+    public String selectWinCnt(String userName) {
+    	return dao.selectWinCnt(userName);
+    }
+	
+	@Override
+    public String selectLossCnt(String userName) {
+    	return dao.selectLossCnt(userName);
+    }
+	
+	@Override
+    public String selectDrawCnt(String userName) {
+    	return dao.selectDrawCnt(userName);
+    }
 
 }

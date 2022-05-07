@@ -62,6 +62,13 @@ public class PlayerServiceImpl implements PlayerService {
     public int getPlayerNum() {
     	return dao.getPlayerNum();
     }
+    
+    @Override
+    public List<String> selectUserCount() {
+    	return dao.selectUserCount();
+    }
+    
+   
 
 }
 

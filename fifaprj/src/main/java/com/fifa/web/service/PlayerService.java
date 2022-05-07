@@ -23,5 +23,9 @@ public interface PlayerService {
      public void logout(HttpSession session);
      
      public int getPlayerNum();
+     
+     public List<String> selectUserCount();
+     
+     
 }
 

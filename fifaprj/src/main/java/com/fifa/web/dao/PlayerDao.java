@@ -16,4 +16,6 @@ public interface PlayerDao {
 	public void updateUserPindex(int userPindex);
 	
 	public int getPlayerNum();
+	
+	public List<String> selectUserCount();
 }

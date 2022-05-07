@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.fifa.web.bean.MainSearchBean;
 import com.fifa.web.bean.MainVsSearchBean;
 import com.fifa.web.bean.PageMakerBean;
+import com.fifa.web.bean.PointCalcBean;
 
 
 @Repository
@@ -73,4 +74,19 @@ public class MainSearchDaoImpl implements MainSearchDao {
 	public void updateVsHistory(MainSearchBean mainSearchBean) {
 		sqlSession.update(namespace+".updateVsHistory",mainSearchBean);
 	}
+	
+	@Override
+    public String selectWinCnt(String userName) {
+    	return sqlSession.selectOne(namespace+".selectWinCnt",userName);
+    }
+	
+	@Override
+    public String selectLossCnt(String userName) {
+    	return sqlSession.selectOne(namespace+".selectLossCnt",userName);
+    }
+	
+	@Override
+    public String selectDrawCnt(String userName) {
+    	return sqlSession.selectOne(namespace+".selectDrawCnt",userName);
+    }
 }

@@ -2,11 +2,15 @@ package com.fifa.web.controller.main;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.Map.Entry;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +33,7 @@ import com.fifa.web.bean.MainSearchBean;
 import com.fifa.web.bean.MainVsSearchBean;
 import com.fifa.web.bean.PageMakerBean;
 import com.fifa.web.bean.PlayerBean;
+import com.fifa.web.bean.PointCalcBean;
 import com.fifa.web.bean.SignUpBean;
 import com.fifa.web.service.MainSearchService;
 import com.fifa.web.service.PlayerService;
@@ -333,5 +338,54 @@ public class MainController {
 		model.addAttribute("getPlayerList", list);
 
 		return "main.mainVsSearch";
+	}
+	
+	@RequestMapping("mainLeagueSearch")
+	public String mainLeagueSearch(HttpSession session, Model model, HttpServletRequest request
+			,PointCalcBean pointCalcBean) throws Exception {
+		int cnt=1;
+		List<String>name = playerService.selectUserCount();
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		ArrayList<ArrayList<String>> datas = new ArrayList<ArrayList<String>>();
+		for(int i=0; i<name.size(); i++) {
+			List<String> cntList = new ArrayList<String>();
+			String winCnt= service.selectWinCnt(name.get(i));
+			String lossCnt= service.selectLossCnt(name.get(i));
+			String drawCnt= service.selectDrawCnt(name.get(i));
+			int calc=(Integer.parseInt(winCnt)*3)+Integer.parseInt(drawCnt);
+			
+			cntList.add(winCnt);
+			cntList.add(drawCnt);
+			cntList.add(lossCnt);
+			cntList.add(Integer.toString(calc));
+			map.put(name.get(i), calc);
+			map2.put(name.get(i), cntList);
+		
+		}
+		List<Map.Entry<String, Integer>> entryList = new LinkedList<>(map.entrySet());
+		entryList.sort(new Comparator<Map.Entry<String, Integer>>() {
+		    @Override
+		    public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+			return o2.getValue() - o1.getValue();
+		    }
+		});
+		for(Map.Entry<String, Integer> entry : entryList){
+			String[] array = map2.get(entry.getKey()).toString().split(", ");
+		
+			ArrayList<String> data1 = new ArrayList<>();
+			data1.add(Integer.toString(cnt));
+			data1.add(entry.getKey());
+			
+			data1.add(array[0].substring(1));
+			data1.add(array[1]);
+			data1.add(array[2]);
+			String[] array2=array[3].split("]");
+			data1.add(array2[0]);
+			datas.add(data1);
+			cnt++;
+		}
+		model.addAttribute("getPoint", datas);
+		return "main.mainLeagueSearch";
 	}
 }

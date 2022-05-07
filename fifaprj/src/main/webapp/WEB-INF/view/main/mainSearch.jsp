@@ -31,6 +31,7 @@
         <h1 class="display-5 fw-bold">전체전적을 확인해보세요!</h1>
         <p class="col-md-8 fs-4">현재 플레이어는 총 ${getPlayerList} 명 입니다.</p>
         <button class="btn custom btn-lg" type="button" onclick="location.href='/main/mainAllSearch'; return false;">전체전적 보러가기</button>
+        <button class="btn custom btn-lg" type="button" onclick="location.href='/main/mainLeagueSearch'; return false;">리그 표 보러가기</button>
       </div>
     </div>
 
