@@ -2,6 +2,7 @@ package com.fifa.web.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -88,5 +89,10 @@ public class MainSearchDaoImpl implements MainSearchDao {
 	@Override
     public String selectDrawCnt(String userName) {
     	return sqlSession.selectOne(namespace+".selectDrawCnt",userName);
+    }
+	
+	@Override
+    public List<Map<String, Object>> selectGoal(String userName) {
+    	return sqlSession.selectList(namespace+".selectGoal",userName);
     }
 }

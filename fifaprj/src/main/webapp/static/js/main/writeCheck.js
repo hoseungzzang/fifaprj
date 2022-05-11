@@ -18,6 +18,10 @@ $(function() {
 					alert(grparr[i][j] + (i + 1) + "열의" + (j + 1) + "번째 칸을 입력하세요.");
 					return false;
 				}
+				if (grparr[i][j] == "null") {
+					alert((i + 1) + "열의" + (j + 1) + "번째 콤보박스를 선택하세요.");
+					return false;
+				}
 			}
 
 		}

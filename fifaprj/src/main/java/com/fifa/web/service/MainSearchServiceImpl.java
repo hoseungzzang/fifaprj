@@ -1,6 +1,7 @@
 package com.fifa.web.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -82,6 +83,11 @@ public class MainSearchServiceImpl implements MainSearchService {
 	@Override
     public String selectDrawCnt(String userName) {
     	return dao.selectDrawCnt(userName);
+    }
+	
+	@Override
+    public List<Map<String, Object>> selectGoal(String userName) {
+    	return dao.selectGoal(userName);
     }
 
 }

@@ -182,4 +182,17 @@
         and (vsWriter = #{userName} or vsOpponent=#{userName}) 
         and vsWinner='무승부';
 	</select>
+	
+	<select id="selectGoal" resultType="map" parameterType="String">
+		SELECT SUM(vsWriterScore) as myScore,
+		SUM(vsOpponentScore)AS enemyScore 
+		FROM vsHistory 
+		where vsMatch='lMatch' and vsWriter=#{userName}
+		union
+		SELECT 
+		SUM(vsOpponentScore)AS myScore,
+		SUM(vsWriterScore) as enemyScore
+		FROM vsHistory 
+		where vsMatch='lMatch' and vsOpponent=#{userName}
+	</select>
 </mapper>

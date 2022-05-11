@@ -1,6 +1,7 @@
 package com.fifa.web.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.fifa.web.bean.MainSearchBean;
 import com.fifa.web.bean.MainVsSearchBean;
@@ -34,4 +35,6 @@ public interface MainSearchDao {
 	public String selectLossCnt(String userName);
 	
 	public String selectDrawCnt(String userName);
+	
+	public List<Map<String, Object>> selectGoal(String userName);
 }

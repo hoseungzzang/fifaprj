@@ -103,7 +103,7 @@ public class MainController {
 		} else if (cntPerPage == null) {
 			cntPerPage = "10";
 		}
-	
+
 		pageMakerBean = new PageMakerBean(total, Integer.parseInt(nowPage), Integer.parseInt(cntPerPage),
 				mainSearchBean.getVsWriter(), mainSearchBean.getVsOpponent(), mainSearchBean.getVsMatch());
 		model.addAttribute("paging", pageMakerBean);
@@ -339,48 +339,69 @@ public class MainController {
 
 		return "main.mainVsSearch";
 	}
-	
+
 	@RequestMapping("mainLeagueSearch")
-	public String mainLeagueSearch(HttpSession session, Model model, HttpServletRequest request
-			,PointCalcBean pointCalcBean) throws Exception {
-		int cnt=1;
-		List<String>name = playerService.selectUserCount();
+	public String mainLeagueSearch(HttpSession session, Model model, HttpServletRequest request,
+			PointCalcBean pointCalcBean) throws Exception {
+		int sum =0;
+		int cnt = 1;
+		List<String> name = playerService.selectUserCount();
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		Map<String, Object> map2 = new HashMap<String, Object>();
 		ArrayList<ArrayList<String>> datas = new ArrayList<ArrayList<String>>();
-		for(int i=0; i<name.size(); i++) {
+		for (int i = 0; i < name.size(); i++) {
 			List<String> cntList = new ArrayList<String>();
-			String winCnt= service.selectWinCnt(name.get(i));
-			String lossCnt= service.selectLossCnt(name.get(i));
-			String drawCnt= service.selectDrawCnt(name.get(i));
-			int calc=(Integer.parseInt(winCnt)*3)+Integer.parseInt(drawCnt);
-			
+			String winCnt = service.selectWinCnt(name.get(i));
+			String lossCnt = service.selectLossCnt(name.get(i));
+			String drawCnt = service.selectDrawCnt(name.get(i));
+			int calc = (Integer.parseInt(winCnt) * 3) + Integer.parseInt(drawCnt);
+			List<Map<String, Object>> goal = service.selectGoal(name.get(i));
+			sum=0;
+			if (goal.size() > 1) {//득실체크
+				if (goal.get(0) != null && goal.get(1) != null) {
+					sum= Integer.parseInt(goal.get(0).get("myScore").toString())+Integer.parseInt(goal.get(1).get("myScore").toString())
+					-Integer.parseInt(goal.get(0).get("enemyScore").toString())-Integer.parseInt(goal.get(1).get("enemyScore").toString());
+				
+				}
+				else if (goal.get(0) == null && goal.get(1) != null) {
+					sum= Integer.parseInt(goal.get(1).get("myScore").toString())
+					-Integer.parseInt(goal.get(1).get("enemyScore").toString());
+					
+				}
+				else {
+					sum= Integer.parseInt(goal.get(0).get("myScore").toString())
+							-Integer.parseInt(goal.get(0).get("enemyScore").toString());
+					
+				}
+			}
 			cntList.add(winCnt);
 			cntList.add(drawCnt);
 			cntList.add(lossCnt);
 			cntList.add(Integer.toString(calc));
-			map.put(name.get(i), calc);
-			map2.put(name.get(i), cntList);
-		
+			cntList.add(Integer.toString(sum));
+			map.put(name.get(i), calc);// 이름하고 승점
+			map2.put(name.get(i), cntList);// 이름하고 승무
+
 		}
 		List<Map.Entry<String, Integer>> entryList = new LinkedList<>(map.entrySet());
 		entryList.sort(new Comparator<Map.Entry<String, Integer>>() {
-		    @Override
-		    public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-			return o2.getValue() - o1.getValue();
-		    }
+			@Override
+			public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+				return o2.getValue() - o1.getValue();
+			}
 		});
-		for(Map.Entry<String, Integer> entry : entryList){
+		for (Map.Entry<String, Integer> entry : entryList) {
 			String[] array = map2.get(entry.getKey()).toString().split(", ");
-		
+			
 			ArrayList<String> data1 = new ArrayList<>();
 			data1.add(Integer.toString(cnt));
 			data1.add(entry.getKey());
-			
+
 			data1.add(array[0].substring(1));
 			data1.add(array[1]);
 			data1.add(array[2]);
-			String[] array2=array[3].split("]");
+			data1.add(array[3]);
+			String[] array2 = array[4].split("]");
 			data1.add(array2[0]);
 			datas.add(data1);
 			cnt++;
