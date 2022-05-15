@@ -80,12 +80,12 @@ public class MainController {
 		String userName = request.getParameter("mySearch");
 
 		mainSearchBean.setVsMatch(vsMatch);
-		System.out.println("ctr selectVsMatch  " + request.getParameter("selectVsMatch"));
-		System.out.println("mainctr  " + mainSearchBean.getVsMatch());
-		if (userName == null && request.getParameter("userName1") != null
-				&& request.getParameter("userName2") != null) {
+	
+		if (userName == null && request.getParameter("userName1") != null && request.getParameter("userName2") != null) {
 			mainSearchBean.setVsWriter(request.getParameter("userName1"));
 			mainSearchBean.setVsOpponent(request.getParameter("userName2"));
+			System.out.println("test "+mainSearchBean.getVsWriter());
+			System.out.println(mainSearchBean.getVsOpponent());
 
 		} else {
 			mainSearchBean.setVsWriter(userName);
