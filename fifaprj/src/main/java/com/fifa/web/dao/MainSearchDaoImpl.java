@@ -77,22 +77,22 @@ public class MainSearchDaoImpl implements MainSearchDao {
 	}
 	
 	@Override
-    public String selectWinCnt(String userName) {
-    	return sqlSession.selectOne(namespace+".selectWinCnt",userName);
+    public String selectWinCnt(PointCalcBean pointCalcBean) {
+    	return sqlSession.selectOne(namespace+".selectWinCnt",pointCalcBean);
     }
 	
 	@Override
-    public String selectLossCnt(String userName) {
-    	return sqlSession.selectOne(namespace+".selectLossCnt",userName);
+    public String selectLossCnt(PointCalcBean pointCalcBean) {
+    	return sqlSession.selectOne(namespace+".selectLossCnt",pointCalcBean);
     }
 	
 	@Override
-    public String selectDrawCnt(String userName) {
-    	return sqlSession.selectOne(namespace+".selectDrawCnt",userName);
+    public String selectDrawCnt(PointCalcBean pointCalcBean) {
+    	return sqlSession.selectOne(namespace+".selectDrawCnt",pointCalcBean);
     }
 	
 	@Override
-    public List<Map<String, Object>> selectGoal(String userName) {
-    	return sqlSession.selectList(namespace+".selectGoal",userName);
+    public List<Map<String, Object>> selectGoal(PointCalcBean pointCalcBean) {
+    	return sqlSession.selectList(namespace+".selectGoal",pointCalcBean);
     }
 }

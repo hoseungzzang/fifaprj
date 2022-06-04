@@ -71,23 +71,23 @@ public class MainSearchServiceImpl implements MainSearchService {
 	}
 	
 	@Override
-    public String selectWinCnt(String userName) {
-    	return dao.selectWinCnt(userName);
+    public String selectWinCnt(PointCalcBean pointCalcBean) {
+    	return dao.selectWinCnt(pointCalcBean);
     }
 	
 	@Override
-    public String selectLossCnt(String userName) {
-    	return dao.selectLossCnt(userName);
+    public String selectLossCnt(PointCalcBean pointCalcBean) {
+    	return dao.selectLossCnt(pointCalcBean);
     }
 	
 	@Override
-    public String selectDrawCnt(String userName) {
-    	return dao.selectDrawCnt(userName);
+    public String selectDrawCnt(PointCalcBean pointCalcBean) {
+    	return dao.selectDrawCnt(pointCalcBean);
     }
 	
 	@Override
-    public List<Map<String, Object>> selectGoal(String userName) {
-    	return dao.selectGoal(userName);
+    public List<Map<String, Object>> selectGoal(PointCalcBean pointCalcBean) {
+    	return dao.selectGoal(pointCalcBean);
     }
 
 }

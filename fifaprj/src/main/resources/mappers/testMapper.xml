@@ -174,32 +174,34 @@
 		SELECT userName FROM userInfo where userYn='Y';
 	</select>
 	
-	<select id="selectWinCnt" resultType="String" parameterType="String">
-		 SELECT count(vsWinner) FROM fifaDB.vsHistory where vsMatch='lMatch' and vsWinner=#{userName};
+	<select id="selectWinCnt" resultType="String" parameterType="PointCalcBeanAlias">
+		 SELECT count(vsWinner) FROM fifaDB.vsHistory where vsMatch='lMatch' 
+		 and vsWinner=#{userName} and vsDate between #{fDate} and #{lDate};
 	</select>
 	
-	<select id="selectLossCnt" resultType="String" parameterType="String">
-		 SELECT count(vsLoser) FROM fifaDB.vsHistory where vsMatch='lMatch' and vsLoser=#{userName};
+	<select id="selectLossCnt" resultType="String" parameterType="PointCalcBeanAlias">
+		 SELECT count(vsLoser) FROM fifaDB.vsHistory where vsMatch='lMatch' 
+		 and vsLoser=#{userName} and vsDate between #{fDate} and #{lDate};
 	</select>
 	
-	<select id="selectDrawCnt" resultType="String" parameterType="String">
+	<select id="selectDrawCnt" resultType="String" parameterType="PointCalcBeanAlias">
 		SELECT count(*)
         FROM fifaDB.vsHistory 
         where vsMatch='lMatch' 
         and (vsWriter = #{userName} or vsOpponent=#{userName}) 
-        and vsWinner='무승부';
+        and vsWinner='무승부' and vsDate between #{fDate} and #{lDate};
 	</select>
 	
-	<select id="selectGoal" resultType="map" parameterType="String">
+	<select id="selectGoal" resultType="map" parameterType="PointCalcBeanAlias">
 		SELECT SUM(vsWriterScore) as myScore,
 		SUM(vsOpponentScore)AS enemyScore 
 		FROM vsHistory 
-		where vsMatch='lMatch' and vsWriter=#{userName}
+		where vsMatch='lMatch' and vsWriter=#{userName} and vsDate between #{fDate} and #{lDate}
 		union
 		SELECT 
 		SUM(vsOpponentScore)AS myScore,
 		SUM(vsWriterScore) as enemyScore
 		FROM vsHistory 
-		where vsMatch='lMatch' and vsOpponent=#{userName}
+		where vsMatch='lMatch' and vsOpponent=#{userName} and vsDate between #{fDate} and #{lDate}
 	</select>
 </mapper>

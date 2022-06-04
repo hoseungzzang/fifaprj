@@ -59,7 +59,7 @@ public class MainController {
 
 		model.addAttribute("getPlayerList", playerService.getPlayerNum());
 		session = request.getSession();
-		System.out.println(session.getAttribute("userName"));
+	
 		return "main.mainSearch";
 	}
 
@@ -84,8 +84,7 @@ public class MainController {
 		if (userName == null && request.getParameter("userName1") != null && request.getParameter("userName2") != null) {
 			mainSearchBean.setVsWriter(request.getParameter("userName1"));
 			mainSearchBean.setVsOpponent(request.getParameter("userName2"));
-			System.out.println("test "+mainSearchBean.getVsWriter());
-			System.out.println(mainSearchBean.getVsOpponent());
+			
 
 		} else {
 			mainSearchBean.setVsWriter(userName);
@@ -93,7 +92,7 @@ public class MainController {
 		}
 
 		int total = service.countBoard(mainSearchBean);
-		System.out.println(total);
+		
 
 		if (nowPage == null && cntPerPage == null) {
 			nowPage = "1";
@@ -118,7 +117,7 @@ public class MainController {
 
 			return "error";
 		}
-		System.out.println(mainSearchBean.getVsIndex() + "  " + mainSearchBean.getVsWriter());
+	
 		return "main.mainAllSearch";
 	}
 
@@ -210,7 +209,7 @@ public class MainController {
 				}
 
 				mainSearchBean.setVsIndex(service.countBoard2() + 1);
-				System.out.println(mainSearchBean.getVsIndex());
+			
 				if (mainSearchBean.getVsWriterScore() > mainSearchBean.getVsOpponentScore()) {
 					mainSearchBean.setVsWinner(mainSearchBean.getVsWriter());
 					mainSearchBean.setVsLoser(mainSearchBean.getVsOpponent());
@@ -222,8 +221,6 @@ public class MainController {
 					mainSearchBean.setVsLoser("¹«½ÂºÎ");
 				}
 
-				System.out.println(mainSearchBean.getVsWriter() + " " + mainSearchBean.getVsOpponent() + " "
-						+ mainSearchBean.getVsWriterScore());
 				service.insertHistory(mainSearchBean);
 
 			}
@@ -303,7 +300,7 @@ public class MainController {
 		}
 
 		/* model.addAttribute("getPlayerList", playerService.getPlayerName('Y')); */
-		System.out.println(list.size());
+		
 		for (int i = 0; i < list.size(); i++) {
 			if (!request.getParameter("userName1").equals(list.get(i).getName().toString())) {
 				mainVsSearchBean.setPlayer1(request.getParameter("userName1"));
@@ -341,7 +338,8 @@ public class MainController {
 	}
 
 	@RequestMapping("mainLeagueSearch")
-	public String mainLeagueSearch(HttpSession session, Model model, HttpServletRequest request,
+	public String mainLeagueSearch(@RequestParam(value = "date", defaultValue = "06") String date
+			,HttpSession session, Model model, HttpServletRequest request,
 			PointCalcBean pointCalcBean) throws Exception {
 		int sum =0;
 		int cnt = 1;
@@ -351,11 +349,16 @@ public class MainController {
 		ArrayList<ArrayList<String>> datas = new ArrayList<ArrayList<String>>();
 		for (int i = 0; i < name.size(); i++) {
 			List<String> cntList = new ArrayList<String>();
-			String winCnt = service.selectWinCnt(name.get(i));
-			String lossCnt = service.selectLossCnt(name.get(i));
-			String drawCnt = service.selectDrawCnt(name.get(i));
+			pointCalcBean.setUserName(name.get(i));
+			String fDate = "2022-"+date+"-01";
+			String lDate = "2022-"+date+"-31";
+			pointCalcBean.setfDate(fDate);
+			pointCalcBean.setlDate(lDate);
+			String winCnt = service.selectWinCnt(pointCalcBean);
+			String lossCnt = service.selectLossCnt(pointCalcBean);
+			String drawCnt = service.selectDrawCnt(pointCalcBean);
 			int calc = (Integer.parseInt(winCnt) * 3) + Integer.parseInt(drawCnt);
-			List<Map<String, Object>> goal = service.selectGoal(name.get(i));
+			List<Map<String, Object>> goal = service.selectGoal(pointCalcBean);
 			sum=0;
 			if (goal.size() > 1) {//µæ½ÇÃ¼Å©
 				if (goal.get(0) != null && goal.get(1) != null) {
@@ -407,6 +410,7 @@ public class MainController {
 			cnt++;
 		}
 		model.addAttribute("getPoint", datas);
+		model.addAttribute("getMon", date);
 		return "main.mainLeagueSearch";
 	}
 }

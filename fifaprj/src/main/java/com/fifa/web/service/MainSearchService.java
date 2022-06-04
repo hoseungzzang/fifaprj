@@ -31,11 +31,11 @@ public interface MainSearchService {
 	 
 	 public void updateVsHistory(MainSearchBean mainSearchBean);
 	 
-	 public String selectWinCnt(String userName);
+	 public String selectWinCnt(PointCalcBean pointCalcBean);
 	 
-	 public String selectLossCnt(String userName);
+	 public String selectLossCnt(PointCalcBean pointCalcBean);
 	 
-	 public String selectDrawCnt(String userName);
+	 public String selectDrawCnt(PointCalcBean pointCalcBean);
 	 
-	 public List<Map<String, Object>> selectGoal(String userName);
+	 public List<Map<String, Object>> selectGoal(PointCalcBean pointCalcBean);
 }
