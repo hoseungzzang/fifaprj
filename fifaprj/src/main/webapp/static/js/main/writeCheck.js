@@ -13,6 +13,10 @@ $(function() {
 			grparr[i][2] = $("input[name=vsOpponentScore]").eq(i).val();
 			grparr[i][3] = $("select[name=vsOpponent]").eq(i).val();
 			grparr[i][4] = $("select[name=vsMatch]").eq(i).val();
+			if($("select[name=vsWriter]").eq(i).val()==$("select[name=vsOpponent]").eq(i).val()){
+				alert((i + 1) + "열의 플레이어 명이 동일합니다. 다른 플레이어를 선택해주세요.");
+					return false;
+			}
 			for (var j = 0; j < 5; j++) {
 				if (grparr[i][j] == "") {
 					alert(grparr[i][j] + (i + 1) + "열의" + (j + 1) + "번째 칸을 입력하세요.");
@@ -22,6 +26,7 @@ $(function() {
 					alert((i + 1) + "열의" + (j + 1) + "번째 콤보박스를 선택하세요.");
 					return false;
 				}
+				
 			}
 
 		}
